@@ -648,108 +648,108 @@ class Op_GYAZ_Export_Export (bpy.types.Operator):
                     bone.hide = False
                         
                 # make sure bones export with correct scale
-                bpy.ops.object.mode_set (mode='OBJECT')
-                final_rig.scale = (100, 100, 100)
-                bpy.ops.object.transform_apply (location=False, rotation=False, scale=True, properties=False)
-                final_rig.delta_scale = (0.01, 0.01, 0.01)
+                # bpy.ops.object.mode_set (mode='OBJECT')
+                # final_rig.scale = (100, 100, 100)
+                # bpy.ops.object.transform_apply (location=False, rotation=False, scale=True, properties=False)
+                # final_rig.delta_scale = (0.01, 0.01, 0.01)
                 
                 # bind meshes to the final rig
-                for child in mesh_children:
-                    child.delta_scale[0] *= 100
-                    child.delta_scale[1] *= 100
-                    child.delta_scale[2] *= 100
+                # for child in mesh_children:
+                    # child.delta_scale[0] *= 100
+                    # child.delta_scale[1] *= 100
+                    # child.delta_scale[2] *= 100
 
-                for child in mesh_children:
-                    child.parent = final_rig
-                    child.matrix_parent_inverse = final_rig.matrix_world.inverted ()
-                    child.parent_type = 'ARMATURE'
+                # for child in mesh_children:
+                    # child.parent = final_rig
+                    # child.matrix_parent_inverse = final_rig.matrix_world.inverted ()
+                    # child.parent_type = 'ARMATURE'
                 
                 # constraint final rig to the original armature    
                 make_active_only (final_rig)
                 bpy.ops.object.mode_set (mode='POSE')
                 
-                def constraint_bones (source_bone, target_bone, source_obj, target_obj):
-                    pbones = target_obj.pose.bones
-                    pbone = pbones[target_bone]
-                    c = pbone.constraints.new (type='COPY_LOCATION')
-                    c.target = source_obj
-                    c.subtarget = source_bone
+                # def constraint_bones (source_bone, target_bone, source_obj, target_obj):
+                    # pbones = target_obj.pose.bones
+                    # pbone = pbones[target_bone]
+                    # c = pbone.constraints.new (type='COPY_LOCATION')
+                    # c.target = source_obj
+                    # c.subtarget = source_bone
                     
-                    c = pbone.constraints.new (type='COPY_ROTATION')
-                    c.target = source_obj
-                    c.subtarget = source_bone
+                    # c = pbone.constraints.new (type='COPY_ROTATION')
+                    # c.target = source_obj
+                    # c.subtarget = source_bone
                     
-                    c = pbone.constraints.new (type='TRANSFORM')
-                    c.target = source_obj
-                    c.subtarget = source_bone
-                    c.use_motion_extrapolate = True
-                    c.map_from = 'SCALE'
-                    c.map_to = 'SCALE'
-                    c.map_to_x_from = 'X'
-                    c.map_to_y_from = 'Y'
-                    c.map_to_z_from = 'Z'
-                    c.from_min_x_scale = -1
-                    c.from_max_x_scale = 1
-                    c.from_min_y_scale = -1
-                    c.from_max_y_scale = 1
-                    c.from_min_z_scale = -1
-                    c.from_max_z_scale = 1
-                    c.to_min_x_scale = -0.01
-                    c.to_max_x_scale = 0.01
-                    c.to_min_y_scale = -0.01
-                    c.to_max_y_scale = 0.01
-                    c.to_min_z_scale = -0.01
-                    c.to_max_z_scale = 0.01
+                    # c = pbone.constraints.new (type='TRANSFORM')
+                    # c.target = source_obj
+                    # c.subtarget = source_bone
+                    # c.use_motion_extrapolate = True
+                    # c.map_from = 'SCALE'
+                    # c.map_to = 'SCALE'
+                    # c.map_to_x_from = 'X'
+                    # c.map_to_y_from = 'Y'
+                    # c.map_to_z_from = 'Z'
+                    # c.from_min_x_scale = -1
+                    # c.from_max_x_scale = 1
+                    # c.from_min_y_scale = -1
+                    # c.from_max_y_scale = 1
+                    # c.from_min_z_scale = -1
+                    # c.from_max_z_scale = 1
+                    # c.to_min_x_scale = -0.01
+                    # c.to_max_x_scale = 0.01
+                    # c.to_min_y_scale = -0.01
+                    # c.to_max_y_scale = 0.01
+                    # c.to_min_z_scale = -0.01
+                    # c.to_max_z_scale = 0.01
             
             
                 # constraint 'export bones'        
-                for name in export_bone_list:
-                    constraint_bones (name, name, ori_ao, final_rig)
+                # for name in export_bone_list:
+                    # constraint_bones (name, name, ori_ao, final_rig)
                 
                 # constraint 'extra bones'
-                if constraint_extra_bones:                                                                                     
-                    for item in scene.gyaz_export.extra_bones:
-                        new_name = item.name
-                        source_name = item.source
-                        parent_name = item.parent     
-                        constraint_bones (source_name, new_name, ori_ao, final_rig)            
+                # if constraint_extra_bones:                                                                                     
+                    # for item in scene.gyaz_export.extra_bones:
+                        # new_name = item.name
+                        # source_name = item.source
+                        # parent_name = item.parent     
+                        # constraint_bones (source_name, new_name, ori_ao, final_rig)            
                 
                 # constraint root 
-                if root_mode == 'BONE':
-                    if ori_ao.data.bones.get (root_bone_name) is not None:
-                        subtarget = root_bone_name 
-                else:
-                    subtarget = ''           
+                # if root_mode == 'BONE':
+                    # if ori_ao.data.bones.get (root_bone_name) is not None:
+                        # subtarget = root_bone_name 
+                # else:
+                    # subtarget = ''           
                     
-                c = final_rig.constraints.new (type='COPY_LOCATION')
-                c.target = ori_ao
-                c.subtarget = subtarget
+                # c = final_rig.constraints.new (type='COPY_LOCATION')
+                # c.target = ori_ao
+                # c.subtarget = subtarget
                 
-                c = final_rig.constraints.new (type='COPY_ROTATION')
-                c.target = ori_ao
-                c.subtarget = subtarget
+                # c = final_rig.constraints.new (type='COPY_ROTATION')
+                # c.target = ori_ao
+                # c.subtarget = subtarget
                 
-                c = final_rig.constraints.new (type='TRANSFORM')
-                c.target = ori_ao
-                c.subtarget = subtarget
-                c.use_motion_extrapolate = True
-                c.map_from = 'SCALE'
-                c.map_to = 'SCALE'
-                c.map_to_x_from = 'X'
-                c.map_to_y_from = 'Y'
-                c.map_to_z_from = 'Z'
-                c.from_min_x_scale = -1
-                c.from_max_x_scale = 1
-                c.from_min_y_scale = -1
-                c.from_max_y_scale = 1
-                c.from_min_z_scale = -1
-                c.from_max_z_scale = 1
-                c.to_min_x_scale = -0.01
-                c.to_max_x_scale = 0.01
-                c.to_min_y_scale = -0.01
-                c.to_max_y_scale = 0.01
-                c.to_min_z_scale = -0.01
-                c.to_max_z_scale = 0.01
+                # c = final_rig.constraints.new (type='TRANSFORM')
+                # c.target = ori_ao
+                # c.subtarget = subtarget
+                # c.use_motion_extrapolate = True
+                # c.map_from = 'SCALE'
+                # c.map_to = 'SCALE'
+                # c.map_to_x_from = 'X'
+                # c.map_to_y_from = 'Y'
+                # c.map_to_z_from = 'Z'
+                # c.from_min_x_scale = -1
+                # c.from_max_x_scale = 1
+                # c.from_min_y_scale = -1
+                # c.from_max_y_scale = 1
+                # c.from_min_z_scale = -1
+                # c.from_max_z_scale = 1
+                # c.to_min_x_scale = -0.01
+                # c.to_max_x_scale = 0.01
+                # c.to_min_y_scale = -0.01
+                # c.to_max_y_scale = 0.01
+                # c.to_min_z_scale = -0.01
+                # c.to_max_z_scale = 0.01
                 
                 
                 # rename vert groups to match extra bone names
